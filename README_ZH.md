@@ -95,14 +95,9 @@ Skill 分两层运行：
 
 ---
 
-## 数据来源
+## 数据
 
-报告托管于：
-```
-https://druckenmiller-skills.vercel.app/reports/conviction_YYYY-MM-DD.json
-```
-
-Pipeline 每日在维护者本机运行并推送到 Vercel。如需自建 pipeline，参见[主项目](https://github.com/a0981456759/Druckenmiller_skills)。
+作者每日更新确信度报告。如果今日报告尚未生成，Skill 会告知你。
 
 ---
 

@@ -95,14 +95,9 @@ The skill runs in two layers:
 
 ---
 
-## Data Source
+## Data
 
-Reports are hosted at:
-```
-https://druckenmiller-skills.vercel.app/reports/conviction_YYYY-MM-DD.json
-```
-
-The pipeline runs on the maintainer's machine daily and pushes to Vercel. If you want to run your own pipeline, see the [main project](https://github.com/a0981456759/Druckenmiller_skills).
+The author updates conviction reports daily. If today's report isn't ready yet, the skill will tell you.
 
 ---
 
