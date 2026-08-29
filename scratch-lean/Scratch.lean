@@ -1,6 +1,7 @@
 import Mathlib
 
-open Set
+open Filter Set
+open scoped BigOperators Topology
 
 noncomputable section
 
@@ -75,5 +76,49 @@ theorem CertifiedChart.restrict_carrier_subset
     (chart.restrictToEvidenceNeighborhood sublevel).carrier ⊆
       sublevel.neighborhood :=
   inter_subset_right
+
+inductive PowerData : Type where
+  | morse (radius gap : ℝ)
+  | fold (radius gap : ℝ)
+
+def toyMorseMass (epsilon : ℝ) : ℝ := ‖epsilon‖ + ‖2 * epsilon‖
+def toyFoldMass (epsilon : ℝ) : ℝ := ‖3 * epsilon‖ + ‖4 * epsilon‖
+
+def PowerData.scaledMass (data : PowerData) : ℝ → ℝ :=
+  match data with
+  | .morse _ _ => fun epsilon => epsilon * toyMorseMass epsilon
+  | .fold _ _ => fun epsilon => epsilon * toyFoldMass epsilon
+
+def PowerData.envelope (data : PowerData) : ℝ → ℝ :=
+  match data with
+  | .morse radius gap => fun epsilon => radius * epsilon + gap * epsilon
+  | .fold radius gap => fun epsilon => radius * epsilon + gap * epsilon
+
+theorem PowerData.scaledMass_nonneg
+    (data : PowerData) {epsilon : ℝ} (hepsilon : 0 ≤ epsilon) :
+    0 ≤ data.scaledMass epsilon := by
+  cases data <;>
+    simp [PowerData.scaledMass, toyMorseMass, toyFoldMass, hepsilon] <;>
+    positivity
+
+theorem PowerData.tendsto_envelope_zero (data : PowerData) :
+    Tendsto data.envelope (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+  cases data <;>
+    simp [PowerData.envelope] <;>
+    fun_prop
+
+structure FiniteAtlas where
+  centers : Finset Nat
+  evidence : ∀ center : {c // c ∈ centers}, PowerData
+
+def FiniteAtlas.totalEnvelope (atlas : FiniteAtlas) (epsilon : ℝ) : ℝ :=
+  ∑ center : {c // c ∈ atlas.centers},
+    (atlas.evidence center).envelope epsilon
+
+theorem FiniteAtlas.tendsto_totalEnvelope_zero (atlas : FiniteAtlas) :
+    Tendsto atlas.totalEnvelope (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+  unfold FiniteAtlas.totalEnvelope
+  simpa using tendsto_finset_sum Finset.univ fun center _ =>
+    (atlas.evidence center).tendsto_envelope_zero
 
 end
