@@ -1,0 +1,11 @@
+name = "b2Scratch"
+version = "0.1.0"
+defaultTargets = ["Scratch"]
+
+[[require]]
+name = "mathlib4"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "8e096f85f9401f2c359b6708199c0402a980d921"
+
+[[lean_lib]]
+name = "Scratch"
