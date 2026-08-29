@@ -12,13 +12,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: leanprover/lean-action@v1
         with:
           lake-package-directory: scratch-lean
-          build: true
-      - name: Re-elaborate scratch
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: false
+      - name: Generate manifest and build
         working-directory: scratch-lean
-        run: lake env lean -DwarningAsError=true Scratch.lean
+        run: |
+          lake update
+          lake build Scratch
+          lake env lean -DwarningAsError=true Scratch.lean
