@@ -1,0 +1,25 @@
+name: Private B2 Checkout Probe
+
+on:
+  push:
+    branches:
+      - scratch/lean-b2-kernel-20260829
+    paths:
+      - ".github/workflows/private-b2-checkout-probe.yml"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Probe same-owner private repository checkout
+        uses: actions/checkout@v4
+        with:
+          repository: walu7827/pinned-phi4-kinetic-bridge
+          ref: codex/b2-test-a-lorentzian-all-charts-20260829
+          path: private-b2
+          persist-credentials: false
+      - name: Confirm checkout without printing source
+        shell: bash
+        run: test -f private-b2/lean/lakefile.toml
