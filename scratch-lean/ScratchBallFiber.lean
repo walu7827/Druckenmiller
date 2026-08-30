@@ -1,6 +1,6 @@
 import Mathlib
 
-open Set
+open Set Metric
 
  def fiber (center : ℝ × ℝ) (r m : ℝ) : Set ℝ :=
   {x | (m, x) ∈ Metric.ball center r}
@@ -11,7 +11,7 @@ open Set
     fiber center r m = Metric.ball center.2 r := by
   ext x
   unfold fiber
-  rw [← Metric.ball_prod_same center.1 center.2 r]
+  rw [← ball_prod_same center.1 center.2 r]
   simp [hm]
 
  theorem fiber_eq_empty_of_not_mem
@@ -20,7 +20,7 @@ open Set
     fiber center r m = ∅ := by
   ext x
   unfold fiber
-  rw [← Metric.ball_prod_same center.1 center.2 r]
+  rw [← ball_prod_same center.1 center.2 r]
   simp [hm]
 
  theorem fiber_eq_Ioo_of_mem
