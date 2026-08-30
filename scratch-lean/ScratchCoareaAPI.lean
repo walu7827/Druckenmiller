@@ -5,9 +5,9 @@ open MeasureTheory Set
 #check MeasureTheory.lintegral_image_eq_lintegral_deriv_mul_of_monotoneOn
 #check MeasureTheory.lintegral_image_eq_lintegral_deriv_mul_of_antitoneOn
 #check MeasureTheory.ofReal_integral_eq_lintegral_ofReal
-#check lintegral_const_mul
-#check lintegral_mul_const
-#check lintegral_mono
-#check lintegral_mono_measure
+#check MeasureTheory.lintegral_const_mul
+#check MeasureTheory.lintegral_mul_const
+#check MeasureTheory.lintegral_mono
+#check MeasureTheory.lintegral_mono'
+#check MeasureTheory.lintegral_mono_set
 #check Measure.restrict_le_self
-#check MeasureTheory.lintegral_mono_measure
