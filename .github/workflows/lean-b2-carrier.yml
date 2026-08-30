@@ -1,0 +1,28 @@
+name: Lean B2 carrier scratch
+
+on:
+  push:
+    branches:
+      - scratch/lean-b2-kernel-20260829
+    paths:
+      - scratch-lean/**
+      - .github/workflows/lean-b2-carrier.yml
+  pull_request:
+    paths:
+      - scratch-lean/**
+      - .github/workflows/lean-b2-carrier.yml
+  workflow_dispatch:
+
+jobs:
+  carrier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: scratch-lean
+          build: false
+      - name: Elaborate carrier invariant
+        working-directory: scratch-lean
+        run: lake env lean -DwarningAsError=true ScratchCarrier.lean
