@@ -116,12 +116,20 @@ theorem PowerData.tendsto_envelope_zero (data : PowerData) :
       have hcontinuous : ContinuousAt
           (fun epsilon : ℝ => radius * epsilon + gap * epsilon) 0 := by
         fun_prop
-      simpa [PowerData.envelope] using hcontinuous.continuousWithinAt
+      have hfull : Tendsto
+          (fun epsilon : ℝ => radius * epsilon + gap * epsilon)
+          (nhds 0) (nhds 0) := by
+        simpa using hcontinuous
+      simpa [PowerData.envelope] using hfull.mono_left inf_le_left
   | fold radius gap =>
       have hcontinuous : ContinuousAt
           (fun epsilon : ℝ => radius * epsilon + gap * epsilon) 0 := by
         fun_prop
-      simpa [PowerData.envelope] using hcontinuous.continuousWithinAt
+      have hfull : Tendsto
+          (fun epsilon : ℝ => radius * epsilon + gap * epsilon)
+          (nhds 0) (nhds 0) := by
+        simpa using hcontinuous
+      simpa [PowerData.envelope] using hfull.mono_left inf_le_left
 
 structure FiniteAtlas where
   centers : Finset Nat
