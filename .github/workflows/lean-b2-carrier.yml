@@ -32,6 +32,6 @@ jobs:
         working-directory: scratch-lean
         run: |
           export PATH="$HOME/.elan/bin:$PATH"
-          for source in ScratchCarrier.lean ScratchTwoTerm.lean ScratchFirstExit.lean ScratchBall.lean ScratchBallFiber.lean ScratchCoareaAPI.lean; do
+          for source in ScratchCarrier.lean ScratchTwoTerm.lean ScratchFirstExit.lean ScratchBall.lean ScratchBallFiber.lean ScratchCoareaAPI.lean ScratchMonotoneCoarea.lean; do
             lake env lean -DwarningAsError=true "$source"
           done
