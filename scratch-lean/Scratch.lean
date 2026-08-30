@@ -145,4 +145,34 @@ theorem FiniteAtlas.tendsto_totalEnvelope_zero (atlas : FiniteAtlas) :
   simpa using tendsto_finset_sum Finset.univ fun center _ =>
     (atlas.evidence center).tendsto_envelope_zero
 
+def morseEnv (radius gap epsilon : ℝ) : ℝ :=
+  (1 / Real.pi) *
+      (2 * Real.sqrt (2 * Real.sqrt epsilon / gap)) +
+    (epsilon / Real.pi) * (2 * radius)
+
+def foldEnv (radius gap epsilon : ℝ) : ℝ :=
+  (1 / Real.pi) *
+      Real.sqrt (Real.sqrt (Real.sqrt epsilon / gap)) +
+    (epsilon / Real.pi) * radius
+
+theorem tendsto_morseEnv_zero (radius gap : ℝ) :
+    Tendsto (morseEnv radius gap) (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+  have hcontinuous : ContinuousAt (morseEnv radius gap) 0 := by
+    unfold morseEnv
+    fun_prop
+  have hfull : Tendsto (morseEnv radius gap) (nhds 0) (nhds 0) := by
+    simpa only [ContinuousAt, morseEnv, Real.sqrt_zero, zero_div,
+      mul_zero, add_zero] using hcontinuous
+  exact hfull.mono_left inf_le_left
+
+theorem tendsto_foldEnv_zero (radius gap : ℝ) :
+    Tendsto (foldEnv radius gap) (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
+  have hcontinuous : ContinuousAt (foldEnv radius gap) 0 := by
+    unfold foldEnv
+    fun_prop
+  have hfull : Tendsto (foldEnv radius gap) (nhds 0) (nhds 0) := by
+    simpa only [ContinuousAt, foldEnv, Real.sqrt_zero, zero_div,
+      mul_zero, add_zero] using hcontinuous
+  exact hfull.mono_left inf_le_left
+
 end
