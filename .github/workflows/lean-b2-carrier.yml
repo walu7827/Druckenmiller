@@ -19,19 +19,19 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: leanprover/lean-action@v1
-        with:
-          lake-package-directory: scratch-lean
-          auto-config: false
-          build: false
-          test: false
-          lint: false
+      - name: Install elan
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
       - name: Bootstrap Lake manifest
         working-directory: scratch-lean
-        run: lake update
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake update
       - name: Elaborate B2 kernel probes
         working-directory: scratch-lean
         run: |
+          export PATH="$HOME/.elan/bin:$PATH"
           for source in ScratchCarrier.lean ScratchTwoTerm.lean; do
             lake env lean -DwarningAsError=true "$source"
           done
