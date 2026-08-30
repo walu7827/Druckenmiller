@@ -119,7 +119,7 @@ theorem PowerData.tendsto_envelope_zero (data : PowerData) :
       have hfull : Tendsto
           (fun epsilon : ℝ => radius * epsilon + gap * epsilon)
           (nhds 0) (nhds 0) := by
-        simpa using hcontinuous
+        simpa only [ContinuousAt, mul_zero, add_zero] using hcontinuous
       simpa [PowerData.envelope] using hfull.mono_left inf_le_left
   | fold radius gap =>
       have hcontinuous : ContinuousAt
@@ -128,7 +128,7 @@ theorem PowerData.tendsto_envelope_zero (data : PowerData) :
       have hfull : Tendsto
           (fun epsilon : ℝ => radius * epsilon + gap * epsilon)
           (nhds 0) (nhds 0) := by
-        simpa using hcontinuous
+        simpa only [ContinuousAt, mul_zero, add_zero] using hcontinuous
       simpa [PowerData.envelope] using hfull.mono_left inf_le_left
 
 structure FiniteAtlas where
