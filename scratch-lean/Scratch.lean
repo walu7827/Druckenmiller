@@ -97,19 +97,35 @@ def PowerData.envelope (data : PowerData) : ℝ → ℝ :=
 theorem PowerData.scaledMass_nonneg
     (data : PowerData) {epsilon : ℝ} (hepsilon : 0 ≤ epsilon) :
     0 ≤ data.scaledMass epsilon := by
-  cases data <;>
-    simp [PowerData.scaledMass, toyMorseMass, toyFoldMass, hepsilon] <;>
-    positivity
+  cases data with
+  | morse _ _ =>
+      unfold PowerData.scaledMass
+      exact mul_nonneg hepsilon (by
+        unfold toyMorseMass
+        positivity)
+  | fold _ _ =>
+      unfold PowerData.scaledMass
+      exact mul_nonneg hepsilon (by
+        unfold toyFoldMass
+        positivity)
 
 theorem PowerData.tendsto_envelope_zero (data : PowerData) :
     Tendsto data.envelope (nhdsWithin 0 (Ioi 0)) (nhds 0) := by
-  cases data <;>
-    simp [PowerData.envelope] <;>
-    fun_prop
+  cases data with
+  | morse radius gap =>
+      have hcontinuous : ContinuousAt
+          (fun epsilon : ℝ => radius * epsilon + gap * epsilon) 0 := by
+        fun_prop
+      simpa [PowerData.envelope] using hcontinuous.continuousWithinAt
+  | fold radius gap =>
+      have hcontinuous : ContinuousAt
+          (fun epsilon : ℝ => radius * epsilon + gap * epsilon) 0 := by
+        fun_prop
+      simpa [PowerData.envelope] using hcontinuous.continuousWithinAt
 
 structure FiniteAtlas where
   centers : Finset Nat
-  evidence : ∀ center : {c // c ∈ centers}, PowerData
+  evidence : ∀ _center : {c // c ∈ centers}, PowerData
 
 def FiniteAtlas.totalEnvelope (atlas : FiniteAtlas) (epsilon : ℝ) : ℝ :=
   ∑ center : {c // c ∈ atlas.centers},
