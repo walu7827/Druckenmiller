@@ -28,3 +28,13 @@ jobs:
           lake update
           lake build Scratch
           lake env lean -DwarningAsError=true Scratch.lean
+      - name: Upload scratch output
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-b2-scratch-output
+          path: |
+            scratch-lean/Scratch.lean
+            scratch-lean/lake-manifest.json
+            scratch-lean/.lake/build/lib/lean/Scratch.olean
+          if-no-files-found: error
+          retention-days: 1
