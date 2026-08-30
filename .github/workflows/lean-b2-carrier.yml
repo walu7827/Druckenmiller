@@ -22,7 +22,13 @@ jobs:
       - uses: leanprover/lean-action@v1
         with:
           lake-package-directory: scratch-lean
+          auto-config: false
           build: false
+          test: false
+          lint: false
+      - name: Bootstrap Lake manifest
+        working-directory: scratch-lean
+        run: lake update
       - name: Elaborate carrier invariant
         working-directory: scratch-lean
         run: lake env lean -DwarningAsError=true ScratchCarrier.lean
